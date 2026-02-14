@@ -55,35 +55,42 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         // Validação
-        $validator = Validator::make($request->all(), [
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|email|unique:users,email',
-            'password'  => 'required|min:6',
-            'cpassword' => 'required|same:password',
-            'role'      => 'required|string',
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Erro de validação',
-                'errors'  => $validator->errors()
-            ], 422);
-        }
+    // Validação
+    $validator = Validator::make($request->all(), [
+        'name'      => 'required|string|max:255',
+        'email'     => 'required|email|unique:users,email',
+        'password'  => 'required|min:6',
+        'cpassword' => 'required|same:password',
+        'role'      => 'required|string',
+    ]);
 
-        // Criação do usuário
-        $user = User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role,
-        ]);
-
-        // Token
-        $token = $user->createToken('MyApp')->plainTextToken;
-
+    if ($validator->fails()) {
         return response()->json([
-            'token' => $token,
-            'name'  => $user->name
-        ], 201);
+            'message' => 'Erro de validação',
+            'errors'  => $validator->errors()
+        ], 422);
+    }
+
+    // Garante que não haverá created_at/updated_at vindos do request
+    $data = $request->only(['name', 'email', 'role']);
+    $data['password'] = Hash::make($request->password);
+
+    // Criação do usuário usando Eloquent (Eloquent preencherá created_at/updated_at automaticamente)
+    $user = User::create($data);
+
+    // Caso queira garantir timestamps corretos manualmente:
+    // $user->created_at = now();
+    // $user->updated_at = now();
+    // $user->save();
+
+    // Token
+    $token = $user->createToken('MyApp')->plainTextToken;
+
+    return response()->json([
+        'token' => $token,
+        'name'  => $user->name
+    ], 201);
+
     }
 }
