@@ -4,6 +4,7 @@ namespace App\Http\Controllers\pedido;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class InserirPedidoController extends Controller
 {
@@ -20,12 +21,16 @@ class InserirPedidoController extends Controller
      */
     public function store(Request $request)
     {
+    
         $data = $request->validate([
             "costureira"=>"required|string",
-            "medida"=>"required|float",
-            "roupa"=>"required|text",
-            "valor"=>"required|float"
+            "medida"=>"required|string",
+            "roupa"=>"required|string",
+           "valor"=>"required|string"
         ]);
+        dd($data);
+        $user = Auth::user();
+
     }
 
     /**
