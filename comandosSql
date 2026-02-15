@@ -1,0 +1,46 @@
+USE costureira;
+GO
+
+SELECT 
+    COLUMN_NAME,
+    DATA_TYPE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'users';
+
+ALTER TABLE users
+ALTER COLUMN created_at datetime2 NULL;
+
+ALTER TABLE users
+ALTER COLUMN updated_at datetime2 NULL;
+
+
+
+CHECK (role IN ('admin'))
+
+
+ALTER TABLE personal_access_tokens
+ADD expires_at datetime2 NULL;
+
+
+USE costureira;
+GO
+
+SELECT 
+    COLUMN_NAME,
+    DATA_TYPE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'personal_access_tokens';
+
+
+ALTER TABLE personal_access_tokens
+ALTER COLUMN created_at datetime2 NULL;
+
+ALTER TABLE personal_access_tokens
+ALTER COLUMN updated_at datetime2 NULL;
+
+ALTER TABLE personal_access_tokens
+ALTER COLUMN expires_at datetime2 NULL;
+
+
+SELECT * FROM users
+
