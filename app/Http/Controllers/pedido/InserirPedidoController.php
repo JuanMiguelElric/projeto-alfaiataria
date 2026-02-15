@@ -21,6 +21,7 @@ class InserirPedidoController extends Controller
      */
     public function store(Request $request)
     {
+        $data = $request->user();
     
         $data = $request->validate([
             "costureira"=>"required|string",
@@ -28,8 +29,7 @@ class InserirPedidoController extends Controller
             "roupa"=>"required|string",
            "valor"=>"required|string"
         ]);
-        dd($data);
-        $user = Auth::user();
+
 
     }
 
